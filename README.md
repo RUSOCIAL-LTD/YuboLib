@@ -12,3 +12,6 @@
 
 # Where do i find a compiled version?
 - https://github.com/piombilubicsr/YuboLib/actions
+
+# How to sign?
+- https://github.com/piombilubicsr/Signers (NOT FREE)
