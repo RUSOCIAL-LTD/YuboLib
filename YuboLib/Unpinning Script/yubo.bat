@@ -1,0 +1,1 @@
+frida -U -f co.yellw.yellowapp -l unpin.js
