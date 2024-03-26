@@ -62,11 +62,9 @@ internal class SignEndpoint : EndpointAccessor, ISignEndpoint
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 username = Config.Username
             },
-            yubo_version = Config.yubo_version // Added yubo_version to the sign_json object
+            yubo_version = Config.yubo_version
         };
         request.Content = new StringContent(m_Utilities.JsonSerializeObject(sign_json), Encoding.UTF8, "application/json");
-        // print out the request content/json
-        Console.WriteLine(request.Content.ReadAsStringAsync().Result);
 
         if (Config.ProxySigner)
         {

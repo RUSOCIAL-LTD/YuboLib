@@ -33,7 +33,7 @@ public class YuboConfig
     public string ro_product_model { get; set; }
     public string ro_build_version_release { get; set; }
     public string ro_build_id { get; set; }
-    public string yubo_version { get; set; } // Added yubo_version parameter
+    public string yubo_version { get; set; }
 
     internal readonly IUtilities Utilities;
     internal YuboConfig(IUtilities utilities)
@@ -63,7 +63,7 @@ public class YuboLockedConfig
         ro_product_brand = config.ro_product_brand;
         ro_product_model = config.ro_product_model;
         ro_build_version_release = config.ro_build_version_release;
-        yubo_version = config.yubo_version; // Added yubo_version parameter
+        yubo_version = config.yubo_version;
     }
     public WebProxy Proxy { get; set; }
     public string ApiKey { get; set; }
@@ -77,5 +77,5 @@ public class YuboLockedConfig
     public string ro_product_model { get; set; }
     public string ro_build_version_release { get; set; }
     public string ro_build_id { get; set; }
-    public string yubo_version { get; set; } // Added yubo_version parameter
+    public string yubo_version { get; set; }
 }
