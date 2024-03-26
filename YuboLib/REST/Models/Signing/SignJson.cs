@@ -58,7 +58,7 @@ public class Device
     public string android_id { get; set; }
 }
 
-public class Request
+public class YuboRequestInfo
 {
     public long timestamp { get; set; }
     public string username { get; set; }
@@ -66,7 +66,8 @@ public class Request
 
 public class SerializeSign
 {
-    public Request request { get; set; }
+    public YuboRequestInfo yubo_request_info { get; set; }
     public Device device { get; set; }
+    public string yubo_version { get; set; }
 }
 

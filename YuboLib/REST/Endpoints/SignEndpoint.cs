@@ -48,22 +48,25 @@ internal class SignEndpoint : EndpointAccessor, ISignEndpoint
         request.VersionPolicy = HttpVersionPolicy.RequestVersionExact;
         request.Headers.TryAddWithoutValidation("x-license", Config.ApiKey);
         request.Headers.TryAddWithoutValidation("User-Agent", "Yubo/Public");
-        var sign_json = new SerializeSign { 
-            device = new Device 
-            { 
+        var sign_json = new SerializeSign {
+            device = new Device
+            {
                 android_id = Config.android_id,
                 ro_build_id = Config.ro_build_id,
                 ro_build_version_release = Config.ro_build_version_release,
                 ro_product_brand = Config.ro_product_brand,
                 ro_product_model = Config.ro_product_model,
             },
-            request = new Request 
-            { 
+            yubo_request_info = new YuboRequestInfo
+            {
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 username = Config.Username
-            }
+            },
+            yubo_version = Config.yubo_version // Added yubo_version to the sign_json object
         };
         request.Content = new StringContent(m_Utilities.JsonSerializeObject(sign_json), Encoding.UTF8, "application/json");
+        // print out the request content/json
+        Console.WriteLine(request.Content.ReadAsStringAsync().Result);
 
         if (Config.ProxySigner)
         {
