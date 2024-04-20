@@ -1,61 +1,48 @@
-const certificate = "Put your mitm certificate here."
+Java.perform(function () {
+    const showHeaders = true;
 
-function hookSsl() {
-    Java.perform(function () {
-        console.log('[*] Script started');
-    
-        var certificateArray = Java.use('[Ljava.lang.String;');
-        var JavaString = Java.use('java.lang.String');
-        var myCertificate = JavaString.$new(certificate);
-    
-        var HookedClass = Java.use('java.security.cert.CertificateFactory');
-        const InputStream = Java.use('java.io.ByteArrayInputStream');
-        var inStreamCertificate = InputStream.$new(myCertificate.getBytes());
-    
-        var done = false;
-    
-        HookedClass.generateCertificate.implementation = function (inStream) {
-            if(!done) {
-                console.log("[*] Successfully changed the certificate");
-                done = true;
-                return this.generateCertificate(inStreamCertificate);
-            }
-    
-            return this.generateCertificate(inStream);
-        };
+    const Request = Java.use("okhttp3.Request"); // okhttp3.Request
+    const Response = Java.use("okhttp3.Response"); // okhttp3.Response
 
-        console.log("[*] SSL pinning should be disabled.");	
-    });
-}
+    const BridgeInterceptor = Java.use("okhttp3.internal.http.BridgeInterceptor"); // this is where we can intercept the requests!
+    const Buffer = Java.use("okio.Buffer");
 
-function hookSslTwo() {
-    Java.perform(function () {
-        var SSLContext = Java.use("javax.net.ssl.SSLContext");
-        var X509TrustManager = Java.use('javax.net.ssl.X509TrustManager');
-        var TrustManager = Java.registerClass({
-            name: 'com.sensepost.test.TrustManager',
-            implements: [X509TrustManager],
-            methods: {
-                checkClientTrusted: function(chain, authType) {},
-                checkServerTrusted: function(chain, authType) {},
-                getAcceptedIssuers: function() {
-                    return [];
-                }
-            }
-        });
-        var TrustManagers = [TrustManager.$new()];
-        var SSLContext_init = SSLContext.init.overload('[Ljavax.net.ssl.KeyManager;', '[Ljavax.net.ssl.TrustManager;', 'java.security.SecureRandom');
+    
+    function formatHeaders(headers) {
+        return headers.toString();
+    }
 
-        try {
-            SSLContext_init.implementation = function(keyManager, trustManager, secureRandom) {
-                console.log("[+] Overriding SSLContext.init() with the custom TrustManager android < 7");
-                SSLContext_init.call(this, keyManager, TrustManagers, secureRandom);
-            };
-        } catch (err) {
-            console.log("[-] TrustManager Not Found");
+    function interceptRequest(request) {
+        let requestMethod = request.method();
+        let requestUrl = request.url().toString();
+        console.log(`[>] request intercepted: method=${requestMethod} url=${requestUrl}`);
+        console.log(request.toString());
+    }
+
+    function interceptResponse(response) {
+        console.log("[<] response intercepted: " + JSON.stringify(response.toString()));
+
+        if (showHeaders) {
+            console.log(" < headers:\n" + formatHeaders(response.headers));
         }
-    });
-}
 
-hookSsl();
-hookSslTwo();
+        let responseBody = response.peekBody(1024 * 128); // okhttp3.Response::peekBody(byteCount: Long)
+        if (responseBody != null) {
+            let responseBodyString = responseBody.string();
+            if (responseBodyString != "") {
+                console.log(" < body: " + responseBodyString);
+            }
+        }
+        console.log("\n");
+    }
+
+    BridgeInterceptor.intercept.implementation = function(chain) {
+        let request = chain.request();
+        interceptRequest(request);
+
+        let response = this.intercept(chain);
+
+        interceptResponse(response);
+        return response;
+    }
+});
