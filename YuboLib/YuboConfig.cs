@@ -28,7 +28,7 @@ public class YuboConfig
     public bool BandwithSaver { get; set; } = true;
     public int Timeout { get; set; }
     public string android_id { get; set; } = AndroidIDGenerator.GenerateAndroidID();
-    public string Username { get; set; }
+    public string Value { get; set; }
     public string ro_product_brand { get; set; }
     public string ro_product_model { get; set; }
     public string ro_build_version_release { get; set; }
@@ -52,7 +52,7 @@ public class YuboLockedConfig
     public YuboLockedConfig(YuboConfig config)
     {
         android_id = config.android_id;
-        Username = config.Username;
+        Value = config.Value;
         ApiKey = config.ApiKey;
         Proxy = config.Proxy;
         Debug = config.Debug;
@@ -67,7 +67,7 @@ public class YuboLockedConfig
     }
     public WebProxy Proxy { get; set; }
     public string ApiKey { get; set; }
-    public string Username { get; set; }
+    public string Value { get; set; }
     public string android_id { get; set; }
     public bool Debug { get; set; }
     public bool BandwithSaver { get; set; }

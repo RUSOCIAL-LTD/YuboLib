@@ -28,8 +28,8 @@ internal class SignEndpoint : EndpointAccessor, ISignEndpoint
         if (string.IsNullOrEmpty(Config.ApiKey))
             new Exception("ApiKey is required");
 
-        if (string.IsNullOrEmpty(Config.Username))
-            new Exception("Username is required");
+        if (string.IsNullOrEmpty(Config.Value))
+            new Exception("Value is required");
 
         if (string.IsNullOrEmpty(Config.android_id) || string.IsNullOrEmpty(Config.ro_build_id) || string.IsNullOrEmpty(Config.ro_build_version_release) || string.IsNullOrEmpty(Config.ro_product_brand) || string.IsNullOrEmpty(Config.ro_product_model))
             throw new Exception("Phone Stuff is required");
@@ -60,7 +60,7 @@ internal class SignEndpoint : EndpointAccessor, ISignEndpoint
             yubo_request_info = new YuboRequestInfo
             {
                 timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                username = Config.Username
+                value = Config.Value
             },
             yubo_version = Config.yubo_version
         };

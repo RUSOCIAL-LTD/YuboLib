@@ -28,7 +28,7 @@ internal class LoginEndpoint : EndpointAccessor, ILoginEndpoint
     {
         var parameters = new Dictionary<string, string>
         {
-            {"username", Config.Username },
+            {"username", Config.Value },
             {"type", "username" },
             {"password", password },
         };
