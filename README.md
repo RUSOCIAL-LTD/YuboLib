@@ -11,7 +11,7 @@
 - Look at ExampleEndpoint and its traces to undertand how the lib works
 
 # Where do i find a compiled version?
-- https://github.com/piombilubicsr/YuboLib/actions
+- https://github.com/RUSOCIAL-LTD/YuboLib/actions
 
 # How to sign?
 - https://github.com/piombilubicsr/Signers (NOT FREE)
